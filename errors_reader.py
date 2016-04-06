@@ -1,7 +1,5 @@
 import csv
 
-print "Hello"
-
 JAVASEER_INDEX = 0
 STUDENT_ID_INDEX = 1
 JAVAC_CALL_INDEX = 2
@@ -17,9 +15,12 @@ errors_by_student = dict()
 #Assignment Dictionary
 errors_by_assignment = dict()
 
+
+print "Opening File..."
 # Stick them in errorList
 with open("test_output.csv", "rb") as f:
     reader = csv.reader(f)
+    print "Processing..."
     for i, line in enumerate(reader):
         #print 'line[{}] = {}'.format(i, line)
         loadStudentID  = str(line[STUDENT_ID_INDEX])
@@ -27,10 +28,10 @@ with open("test_output.csv", "rb") as f:
         loadTimestamp  = str(line[TIME_STAMP_INDEX])
         loadError = str(line[JAVAC_OUT_INDEX])
         
-        print "StudentID: " + loadStudentID
-        print "Assignment: " + loadAssignment
-        print "Timestamp: " + loadTimestamp
-        print "Error: " + loadError
+        #print "StudentID: " + loadStudentID
+        #print "Assignment: " + loadAssignment
+        #print "Timestamp: " + loadTimestamp
+        #print "Error: " + loadError
         
         # Iterate through all the lines of each error and look for 'error: '
         for error_line in loadError.splitlines():
@@ -56,6 +57,7 @@ with open("test_output.csv", "rb") as f:
                 else:
                     errors_by_assignment[loadAssignment] = [error_entry]
 
+print "done."
 
 
 
