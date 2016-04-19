@@ -23,11 +23,11 @@ errors_by_student = dict()
 #Assignment Dictionary
 errors_by_assignment = dict()
 
-
 print "Opening File..."
 # Stick them in errorList
 with open("test_output.csv", "rb") as f:
     reader = csv.reader(f)
+    headers = reader.next()
     print "Processing..."
     for i, line in enumerate(reader):
         #print 'line[{}] = {}'.format(i, line)
@@ -35,6 +35,13 @@ with open("test_output.csv", "rb") as f:
         loadAssignment = str(line[JAVAC_CALL_INDEX])
         loadTimestamp  = str(line[TIME_STAMP_INDEX])
         loadError = str(line[JAVAC_OUT_INDEX])
+
+        if IDtoConditionDictionary[loadStudentID] == "IGNORE":
+            print "Omitted " + str(loadStudentID) + " b/c IGNORE"
+            continue
+        if IDtoRunsDictionary[loadStudentID] < 5:
+            print "Omitted " + str(loadStudentID) + " b/c < 5 runs"
+            continue
 
         #print "StudentID: " + loadStudentID
         #print "Assignment: " + loadAssignment
