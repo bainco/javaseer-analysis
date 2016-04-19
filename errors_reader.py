@@ -25,7 +25,7 @@ errors_by_assignment = dict()
 
 print "Opening File..."
 # Stick them in errorList
-with open("test_output.csv", "rb") as f:
+with open("oas_javaseer-dump.csv", "rb") as f:
     reader = csv.reader(f)
     headers = reader.next()
     print "Processing..."
@@ -69,7 +69,7 @@ with open("test_output.csv", "rb") as f:
                     while (loadedTime > nextMonday):
                         thisMonday = nextMonday
                         nextMonday = nextMonday + datetime.timedelta(days=7)
-                    #weekCounter += 1
+                    weekCounter += 1
 
                 # Create a new dictionary for this error
                 error_entry = {'error':error_type, 'studentid':loadStudentID, 'assignment':loadAssignment, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
@@ -90,6 +90,11 @@ with open("test_output.csv", "rb") as f:
                 else:
                     errors_by_assignment[loadAssignment] = [error_entry]
 print "done."
+
+def StudentToCSV(theStudent):
+""" Takes in a studentID (string) and outputs all of that students errors
+ to a CSV file with the name 'studentID'.csv """"
+    writeToCSV(str(theStudent), str(theStudent) + '.csv')
 
 def writeToCSV (theList, fileName):
    " Prints the contents of a list of dictionaries to a CSV file where each row is a dictionary "
