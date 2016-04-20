@@ -4,6 +4,7 @@ execfile("IDtoCondition.py")
 # 2. the IDtoRunsDictionary
 
 execfile("error_identifier.py")
+execfile("assignment_identifier.py")
 execfile("errors_reader.py")
 # This process the DB dump.csv into a bunch of dictionaries
 
