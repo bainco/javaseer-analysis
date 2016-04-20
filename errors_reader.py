@@ -51,6 +51,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
         #print "Assignment: " + loadAssignment
         #print "Timestamp: " + loadTimestamp
         #print "Error: " + loadError
+        assignmentName = AssignmentIdentifier(loadAssignment)
 
         loadedTime = datetime.datetime.strptime(loadTimestamp[:-3], time_format)
 
@@ -68,7 +69,6 @@ with open("oas_javaseer-dump.csv", "rb") as f:
             else:
                 successes_by_student[loadStudentID] = [success_entry]
 
-
         # Iterate through all the lines of each error and look for 'error: '
         #errorCount = 0
         for error_line in loadError.splitlines():
@@ -77,7 +77,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
             #    if errorCount != int(re.findall('\d+', re.findall(r'\d+ errors?$', error_line)[0])[0]):
             #        print error_line
             #        print errorCount
-                # This is the number of errors from that line
+            # This is the number of errors from that line
             if (error_line.find("error: ") != -1) or (error_line.find("javac: ") != -1):
                 #errorCount += 1
 
@@ -126,7 +126,6 @@ def AllStudentsToCSV(fileName):
         for key,val in successes_by_student.items():
             for item in val:
                 w.writerow(item)
-
 
 def StudentToCSV(theStudent):
     # Takes in a studentID (string) and outputs all of that students errors to a CSV file with the name studentID.csv
