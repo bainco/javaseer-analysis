@@ -23,7 +23,7 @@ errors_by_student = dict()
 #Assignment Dictionary
 errors_by_assignment = dict()
 
-print "Opening File..."
+print "Opening oas_javaseer-dump..."
 # Stick them in errorList
 with open("oas_javaseer-dump.csv", "rb") as f:
     reader = csv.reader(f)
@@ -43,6 +43,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
             print "Omitted " + str(loadStudentID) + " b/c < 5 runs"
             continue
 
+        loadStudentCondition = str(IDtoConditionDictionary[loadStudentID])
         #print "StudentID: " + loadStudentID
         #print "Assignment: " + loadAssignment
         #print "Timestamp: " + loadTimestamp
@@ -61,7 +62,9 @@ with open("oas_javaseer-dump.csv", "rb") as f:
             if error_line.find("error: ") != -1:
                 #errorCount += 1
                 process_error = error_line.split("error: ")
-                error_type = process_error[-1]
+                loadErrorMessage = process_error[-1]
+
+                loadErrorType = ErrorTypeIdentifier(loadErrorMessage)
 
                 loadedTime = datetime.datetime.strptime(loadTimestamp[:-3], time_format)
 
@@ -72,7 +75,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
                     weekCounter += 1
 
                 # Create a new dictionary for this error
-                error_entry = {'error':error_type, 'studentid':loadStudentID, 'assignment':loadAssignment, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
+                error_entry = {'error_type': loadErrorType, 'error_message':loadErrorMessage, 'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
 
               # Check to see if we've seen this student before
                 # If so, just append the new error_entry to the list of dicts for that student
@@ -91,10 +94,30 @@ with open("oas_javaseer-dump.csv", "rb") as f:
                     errors_by_assignment[loadAssignment] = [error_entry]
 print "done."
 
+def ErrorTypeIdentifier(theError):
+    # Do some stuff
+    return "STUB"
+
+def AllStudentsToCSV(fileName):
+
+    fieldnames = ['studentid', 'condition', 'assignment', 'error_type', 'error_message', 'timestamp','week_num']
+    with open(fileName, 'wb') as outfile:
+       w = csv.DictWriter(outfile, fieldnames=fieldnames)
+       w.writeheader()
+       for key,val in errors_by_student.items():
+           for item in val:
+               w.writerow(item)
+
+
 def StudentToCSV(theStudent):
-""" Takes in a studentID (string) and outputs all of that students errors
- to a CSV file with the name 'studentID'.csv """"
-    writeToCSV(str(theStudent), str(theStudent) + '.csv')
+    # Takes in a studentID (string) and outputs all of that students errors to a CSV file with the name studentID.csv
+    if str(theStudent) in errors_by_student:
+        print "Writing all errors for " + theStudent + " to csv."
+        writeToCSV(errors_by_student[str(theStudent)], str(theStudent) + '.csv')
+        print "done."
+    else:
+        print "No student with ID " + theStudent + " found in the dictionary."
+
 
 def writeToCSV (theList, fileName):
    " Prints the contents of a list of dictionaries to a CSV file where each row is a dictionary "
