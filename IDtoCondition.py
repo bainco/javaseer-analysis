@@ -29,3 +29,5 @@ with open("IDtoCondition.csv", "rb") as f:
 
         IDtoConditionDictionary[loadStudentID] = loadCondition
         IDtoRunsDictionary[loadStudentID] = loadRuns
+
+print "done."
