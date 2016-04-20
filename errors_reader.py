@@ -94,10 +94,6 @@ with open("oas_javaseer-dump.csv", "rb") as f:
                     errors_by_assignment[loadAssignment] = [error_entry]
 print "done."
 
-def ErrorTypeIdentifier(theError):
-    # Do some stuff
-    return "STUB"
-
 def AllStudentsToCSV(fileName):
 
     fieldnames = ['studentid', 'condition', 'assignment', 'error_type', 'error_message', 'timestamp','week_num']
