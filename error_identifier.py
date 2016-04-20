@@ -13,7 +13,7 @@ def ErrorTypeIdentifier(theError):
     if re.search("class .* is public, should be declared in a file named .*\.java$", theError):
         return "wrong file/class name"
 
-    # Incorret package import
+    # Incorrect package import
     if re.search("package (.*) does not exist$", theError):
         return "wrong package name"
 
@@ -52,6 +52,12 @@ def ErrorTypeIdentifier(theError):
         return "variable not intialized"
     if theError == "variable not intialized":
         return "variable not initialized"
+
+    # Static / Context issues
+    if re.search("Illegal static declaration in inner class (.*)$", theError):
+        return "static context issues"
+    if re.search("non-static method (.*) cannot be referenced from a static context", theError):
+        return "static context issues"
 
     # Type issues
     if re.search("incompatible types: (.*)", theError):
