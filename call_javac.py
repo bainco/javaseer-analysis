@@ -1,38 +1,32 @@
 import subprocess
 from subprocess import call
 
-# I can grab this from the program column!
-loadProgram = """
-public class HelloPrinter
-{
 
-public static void main(String[] args)
+def RecreateRuntimeErrors(theProgramName, theProgram):
 
-{
+    # Go ahead and generate the compiled name
+    theProgramCompiledName = theProgramName.replace(".java", "")
 
-double[] myList = {1.9, 2.9, 3.4, 3.5};
-    for (int i = 0; i < 5; i++) {
-        System.out.println(myList[i]);
-    }
-}
+    # Create a text file with the correct name
+    text_file = open(theProgramName, "w")
+    # Insert the program
+    text_file.write(theProgram)
+    # Close the file
+    text_file.close()
 
-}
-"""
+    # Compile the program
+    call(["javac", theProgramName])
 
-# I can just grab the name from the Assignment column
-program_name = """HelloPrinter.java"""
+    # Run the program and listen for errors
+    proc = subprocess.Popen(["java", program_compiled_name],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout_value, stderr_value = proc.communicate('through stdin to stdout')
+    #print '\tpass through:', repr(stdout_value)
+    #print 'stderr:', repr(stderr_value)
 
-program_compiled_name = program_name.replace(".java", "")
+    # Remove the uncompiled version
+    call(["rm", program_name])
+    # Remove the compiled version
+    call(["rm", program_compiled_name + ".class"])
 
-text_file = open(program_name, "w")
-text_file.write(loadProgram)
-text_file.close()
-
-call(["javac", program_name])
-proc = subprocess.Popen(["java", program_compiled_name],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-stdout_value, stderr_value = proc.communicate('through stdin to stdout')
-#print '\tpass through:', repr(stdout_value)
-print 'stderr:', repr(stderr_value)
-
-call(["rm", program_name])
-call(["rm", program_compiled_name + ".class"])
+    # Retrun any errors we had
+    return stderr_value
