@@ -9,10 +9,13 @@ def ErrorTypeIdentifier(theError):
     if re.search("javac: invalid flag: (.*)$", theError):
         return "incorrect javac call"
 
-
     # Class name does not match file name
     if re.search("class .* is public, should be declared in a file named .*\.java$", theError):
         return "wrong file/class name"
+
+    # Incorret package import
+    if re.search("package (.*) does not exist$", theError):
+        return "wrong package name"
 
     # Missing parenthesis or bracket
     if re.search("\'\(\' or \'\[\' expected", theError):
@@ -40,14 +43,30 @@ def ErrorTypeIdentifier(theError):
     if theError == "illegal character: '\u201c'":
         return "used smart quotes"
 
+    # variable already defined
+    if re.search("variable (.*) is already defined in method (.*)$", theError):
+        return "variable already defined"
+
     # variable not intialized
     if re.search("variable .* might not have been initialized$", theError):
         return "variable not intialized"
+    if theError == "variable not intialized":
+        return "variable not initialized"
 
     # Type issues
     if re.search("incompatible types: (.*)", theError):
         return "type mismatch"
     if re.search("incomparable types: (.*)", theError):
         return "type mismatch"
+    if re.search("bad operand types for binary operator '(.*)'$", theError):
+        return "type mismatch"
+    if re.search("bad operand type (.*) for unary operator '(.*)'$", theError):
+        return "type mismatch"
+
+    # Method argument issues
+    if re.search("no suitable method found for (.*)$", theError):
+        return "wrong arguments"
+    if re.search("no suitable constructor found for (.*)$", theError):
+        return "wrong arguments"
 
     return theError

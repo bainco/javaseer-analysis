@@ -7,4 +7,4 @@ execfile("error_identifier.py")
 execfile("errors_reader.py")
 # This process the DB dump.csv into a bunch of dictionaries
 
-AllStudentsToCSV("process_ouput.csv")
+AllStudentsToCSV("run_output.csv")
