@@ -37,8 +37,11 @@ def RunAllPrograms():
 
     for key, value in successes_by_student.iteritems():
         for entry in value:
-            runtimeErrors = RecreateRuntimeErrors(entry['javac_call'], entry['program'])
-            entry['runtime_errors'] = runtimeErrors
+            if (entry['program'].find("JFrame") == -1) and (entry['program'].find("JOptionPane") == -1) and (entry['program'].find("Scanner") == -1):
+                runtimeErrors = RecreateRuntimeErrors(entry['javac_call'], entry['program'])
+                entry['runtime_errors'] = runtimeErrors
+            else:
+                entry['runtime_errors'] = "SKIPPED"
 
     fieldnames = ['studentid', 'condition', 'javac_call', 'assignment_name', 'timestamp','week_num', 'program', 'runtime_errors']
     with open("runtime-test-results", 'wb') as outfile:
