@@ -58,11 +58,14 @@ with open("oas_javaseer-dump.csv", "rb") as f:
             #        print error_line
             #        print errorCount
                 # This is the number of errors from that line
-
-            if error_line.find("error: ") != -1:
+            if (error_line.find("error: ") != -1) or (error_line.find("javac: ") != -1):
                 #errorCount += 1
-                process_error = error_line.split("error: ")
-                loadErrorMessage = process_error[-1]
+
+                if error_line.find("error: ") != -1:
+                    process_error = error_line.split("error: ")
+                    loadErrorMessage = process_error[-1]
+                elif error_line.find("javac: ") != -1:
+                    loadErrorMessage = error_line
 
                 loadErrorType = ErrorTypeIdentifier(loadErrorMessage)
 
