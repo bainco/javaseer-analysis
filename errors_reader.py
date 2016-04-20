@@ -23,6 +23,9 @@ errors_by_student = dict()
 #Assignment Dictionary
 errors_by_assignment = dict()
 
+#successful compilations Dictionary
+successes_by_student = dict()
+
 print "Opening oas_javaseer-dump..."
 # Stick them in errorList
 with open("oas_javaseer-dump.csv", "rb") as f:
@@ -49,6 +52,23 @@ with open("oas_javaseer-dump.csv", "rb") as f:
         #print "Timestamp: " + loadTimestamp
         #print "Error: " + loadError
 
+        loadedTime = datetime.datetime.strptime(loadTimestamp[:-3], time_format)
+
+        if (loadedTime > nextMonday):
+            while (loadedTime > nextMonday):
+                thisMonday = nextMonday
+                nextMonday = nextMonday + datetime.timedelta(days=7)
+            weekCounter += 1
+
+        if loadError == "":
+            # Create a new dictionary for this error
+            success_entry = {'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
+            if loadStudentID in successes_by_student:
+                successes_by_student[loadStudentID].append(success_entry)
+            else:
+                successes_by_student[loadStudentID] = [success_entry]
+
+
         # Iterate through all the lines of each error and look for 'error: '
         #errorCount = 0
         for error_line in loadError.splitlines():
@@ -68,14 +88,6 @@ with open("oas_javaseer-dump.csv", "rb") as f:
                     loadErrorMessage = error_line
 
                 loadErrorType = ErrorTypeIdentifier(loadErrorMessage)
-
-                loadedTime = datetime.datetime.strptime(loadTimestamp[:-3], time_format)
-
-                if (loadedTime > nextMonday):
-                    while (loadedTime > nextMonday):
-                        thisMonday = nextMonday
-                        nextMonday = nextMonday + datetime.timedelta(days=7)
-                    weekCounter += 1
 
                 # Create a new dictionary for this error
                 error_entry = {'error_type': loadErrorType, 'error_message':loadErrorMessage, 'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
@@ -100,12 +112,20 @@ print "done."
 def AllStudentsToCSV(fileName):
 
     fieldnames = ['studentid', 'condition', 'assignment', 'error_type', 'error_message', 'timestamp','week_num']
-    with open(fileName, 'wb') as outfile:
+    with open("errors-" + fileName, 'wb') as outfile:
        w = csv.DictWriter(outfile, fieldnames=fieldnames)
        w.writeheader()
        for key,val in errors_by_student.items():
            for item in val:
                w.writerow(item)
+
+    fieldnames = ['studentid','condition', 'assignment', 'timestamp', 'week_num']
+    with open("successes-" + fileName, 'wb') as outfile:
+        w = csv.DictWriter(outfile, fieldnames=fieldnames)
+        w.writeheader()
+        for key,val in successes_by_student.items():
+            for item in val:
+                w.writerow(item)
 
 
 def StudentToCSV(theStudent):
