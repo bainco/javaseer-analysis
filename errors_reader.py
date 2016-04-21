@@ -38,6 +38,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
         loadAssignment = str(line[JAVAC_CALL_INDEX])
         loadTimestamp  = str(line[TIME_STAMP_INDEX])
         loadError = str(line[JAVAC_OUT_INDEX])
+        loadProgram = str(line[JAVA_PROGRAM_INDEX])
 
         if IDtoConditionDictionary[loadStudentID] == "IGNORE":
             print "Omitted " + str(loadStudentID) + " b/c IGNORE"
@@ -63,7 +64,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
 
         if loadError == "":
             # Create a new dictionary for this error
-            success_entry = {'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
+            success_entry = {'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'assignment_name':assignmentName, 'timestamp':loadTimestamp, 'week_num':str(weekCounter), 'program':loadProgram}
             if loadStudentID in successes_by_student:
                 successes_by_student[loadStudentID].append(success_entry)
             else:
@@ -90,7 +91,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
                 loadErrorType = ErrorTypeIdentifier(loadErrorMessage)
 
                 # Create a new dictionary for this error
-                error_entry = {'error_type': loadErrorType, 'error_message':loadErrorMessage, 'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
+                error_entry = {'error_type': loadErrorType, 'error_message':loadErrorMessage, 'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'assignment_name':assignmentName, 'timestamp':loadTimestamp, 'week_num':str(weekCounter)}
 
               # Check to see if we've seen this student before
                 # If so, just append the new error_entry to the list of dicts for that student
@@ -111,7 +112,7 @@ print "done."
 
 def AllStudentsToCSV(fileName):
 
-    fieldnames = ['studentid', 'condition', 'assignment', 'error_type', 'error_message', 'timestamp','week_num']
+    fieldnames = ['studentid', 'condition', 'assignment', 'assignment_name', 'error_type', 'error_message', 'timestamp','week_num']
     with open("errors-" + fileName, 'wb') as outfile:
        w = csv.DictWriter(outfile, fieldnames=fieldnames)
        w.writeheader()
@@ -119,7 +120,7 @@ def AllStudentsToCSV(fileName):
            for item in val:
                w.writerow(item)
 
-    fieldnames = ['studentid','condition', 'assignment', 'timestamp', 'week_num']
+    fieldnames = ['studentid','condition', 'assignment', 'assignment_name', 'timestamp', 'week_num', 'program']
     with open("successes-" + fileName, 'wb') as outfile:
         w = csv.DictWriter(outfile, fieldnames=fieldnames)
         w.writeheader()
