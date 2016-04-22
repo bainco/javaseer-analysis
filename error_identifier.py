@@ -18,6 +18,8 @@ def ErrorTypeIdentifier(theError):
         return "wrong package name"
 
     # Missing parenthesis or bracket
+    if theError == "\']\' expected":
+        return "unmatched parenthesis or bracket"
     if re.search("\'\(\' or \'\[\' expected", theError):
         return "unmatched parenthesis or bracket"
     if re.search("\'\)\' expected", theError):
@@ -56,7 +58,9 @@ def ErrorTypeIdentifier(theError):
     # Static / Context issues
     if re.search("Illegal static declaration in inner class (.*)$", theError):
         return "static context issues"
-    if re.search("non-static method (.*) cannot be referenced from a static context", theError):
+    if re.search("non-static method (.*) cannot be referenced from a static context$", theError):
+        return "static context issues"
+    if re.search("non-static variable (.*) cannot be referenced from a static context$", theError):
         return "static context issues"
 
     # Type issues
@@ -73,6 +77,8 @@ def ErrorTypeIdentifier(theError):
     if re.search("no suitable method found for (.*)$", theError):
         return "wrong arguments"
     if re.search("no suitable constructor found for (.*)$", theError):
+        return "wrong arguments"
+    if re.search("constructor (.*) in class (.*) cannot be applied to given types;$", theError):
         return "wrong arguments"
 
     return theError

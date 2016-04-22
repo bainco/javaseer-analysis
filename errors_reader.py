@@ -63,7 +63,7 @@ with open("oas_javaseer-dump.csv", "rb") as f:
             weekCounter += 1
 
         if loadError == "":
-            # Create a new dictionary for this error
+            # Create a new dictionary for this success_entry
             success_entry = {'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'assignment_name':assignmentName, 'timestamp':loadTimestamp, 'week_num':str(weekCounter), 'program':loadProgram}
             if loadStudentID in successes_by_student:
                 successes_by_student[loadStudentID].append(success_entry)
