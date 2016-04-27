@@ -28,7 +28,7 @@ successes_by_student = dict()
 
 print "Opening oas_javaseer-dump..."
 # Stick them in errorList
-with open("oas_javaseer-dump.csv", "rb") as f:
+with open("in_data/oas_javaseer-dump.csv", "rb") as f:
     reader = csv.reader(f)
     headers = reader.next()
     print "Processing..."

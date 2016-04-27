@@ -17,7 +17,7 @@ IDtoRunsDictionary = {}
 
 print "Opening ID to Condition file..."
 
-with open("IDtoCondition.csv", "rb") as f:
+with open("in_data/IDtoCondition.csv", "rb") as f:
     reader = csv.reader(f)
     headers = reader.next()
     print "Processing..."
