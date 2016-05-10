@@ -11,6 +11,9 @@ def AssignmentIdentifier(theAssignment):
     if theAssignment.lower().find("age") != -1:
         return "age"
 
+    if theAssignment.lower().find("hello") != -1:
+        return "Hello World"
+
     if theAssignment.lower().find("elephantexam") != -1:
         return "ElephantExam"
     if theAssignment.lower().find("elephat") != -1:

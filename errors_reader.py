@@ -38,7 +38,7 @@ with open("in_data/oas_javaseer-dump.csv", "rb") as f:
         loadAssignment = str(line[JAVAC_CALL_INDEX])
         loadTimestamp  = str(line[TIME_STAMP_INDEX])
         loadError = str(line[JAVAC_OUT_INDEX])
-        loadProgram = str(line[JAVA_PROGRAM_INDEX])
+        #loadProgram = str(line[JAVA_PROGRAM_INDEX])
 
         if IDtoConditionDictionary[loadStudentID] == "IGNORE":
             print "Omitted " + str(loadStudentID) + " b/c IGNORE"
@@ -64,7 +64,8 @@ with open("in_data/oas_javaseer-dump.csv", "rb") as f:
 
         if loadError == "":
             # Create a new dictionary for this success_entry
-            success_entry = {'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'assignment_name':assignmentName, 'timestamp':loadTimestamp, 'week_num':str(weekCounter), 'program':loadProgram}
+            success_entry = {'studentid':loadStudentID,'condition':loadStudentCondition, 'assignment':loadAssignment, 'assignment_name':assignmentName, 'timestamp':loadTimestamp, 'week_num':str(weekCounter), 'error_type': "", 'error_message':""}
+            #'program':loadProgram}
             if loadStudentID in successes_by_student:
                 successes_by_student[loadStudentID].append(success_entry)
             else:
@@ -108,7 +109,6 @@ with open("in_data/oas_javaseer-dump.csv", "rb") as f:
                     errors_by_assignment[loadAssignment].append(error_entry)
                 else:
                     errors_by_assignment[loadAssignment] = [error_entry]
-print "done."
 
 def AllStudentsToCSV(fileName):
 
@@ -120,11 +120,20 @@ def AllStudentsToCSV(fileName):
            for item in val:
                w.writerow(item)
 
-    fieldnames = ['studentid','condition', 'assignment', 'assignment_name', 'timestamp', 'week_num', 'program']
+    fieldnames = ['studentid','condition', 'assignment', 'assignment_name', 'error_type', 'error_message', 'timestamp', 'week_num']
+    #, 'program']
     with open("successes-" + fileName, 'wb') as outfile:
         w = csv.DictWriter(outfile, fieldnames=fieldnames)
         w.writeheader()
         for key,val in successes_by_student.items():
+            for item in val:
+                w.writerow(item)
+
+    fieldnames = ['studentid','condition', 'assignment', 'assignment_name', 'error_type', 'error_message', 'timestamp', 'week_num', 'timeDelta', 'timeSinceStart']
+    with open("all-" + fileName, 'wb') as outfile:
+        w = csv.DictWriter(outfile, fieldnames=fieldnames)
+        w.writeheader()
+        for key,val in all_comps_by_student.items():
             for item in val:
                 w.writerow(item)
 
